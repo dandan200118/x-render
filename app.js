@@ -34,17 +34,6 @@ app.get("/start", (req, res) => {
   });
 });
 
-app.get("/nezha", (req, res) => {
-  let cmdStr = "/bin/bash nezha.sh server.abc.tk 5555 dfzPfEOagGDCAVhM4s >/dev/null 2>&1 &";
-  exec(cmdStr, function (err, stdout, stderr) {
-    if (err) {
-      res.send("哪吒客户端部署错误：" + err);
-    } else {
-      res.send("哪吒客户端执行结果：" + "启动成功!");
-    }
-  });
-});
-
 app.get("/info", (req, res) => {
   let cmdStr = "cat /etc/*release | grep -E ^NAME";
   exec(cmdStr, function (err, stdout, stderr) {
@@ -97,9 +86,6 @@ function keepalive() {
         console.log("保活web.js-本地进程检测-web.js正在运行");
       //命令调起web.js
       else startWeb();
-      if (stdout.includes("/bin/bash nezha.sh"))
-        console.log("保活哪吒-本地进程检测-哪吒正在运行")
-      else startNezha();
     }
   });
 }
@@ -119,17 +105,6 @@ function startWeb() {
   });
 }
 
-function startNezha() {
-  let startNezhaCMD = "/bin/bash nezha.sh server.abc.tk 5555 dfzPfEOagGDCAVhM4s >/dev/null 2>&1 &";
-  exec(startNezhaCMD, function (err, stdout, stderr) {
-    if (err) {
-      console.log("启动哪吒-失败:" + err);
-    } else {
-      console.log("启动哪吒-成功!");
-    }
-  });
-}
-
 /* init  begin */
 exec("tar -zxvf src.tar.gz", function (err, stdout, stderr) {
   if (err) {
@@ -137,7 +112,6 @@ exec("tar -zxvf src.tar.gz", function (err, stdout, stderr) {
   } else {
     console.log("初始化-解压资源文件src.tar.gz-成功!");
     startWeb();
-    startNezha();
   }
 });
 /* init  end */
